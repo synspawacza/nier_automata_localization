@@ -33,9 +33,8 @@ class MrubyHeader:
 class PoolRecord:
     def __init__(self, reader):
         self.type = reader.read(1)
-        self.size = int.from_bytes(reader.read(2), 'big')
-        self.value = reader.read(self.size).decode("utf-8")
-        print(hex(self.type[0]) + "# " + repr(self.value))
+        size = int.from_bytes(reader.read(2), 'big') #implied by len of the array
+        self.value = reader.read(size).decode("utf-8")
 
 class IrepSegment:
     def __init__(self, reader, offset):
@@ -44,22 +43,24 @@ class IrepSegment:
         self.nregs = int.from_bytes(reader.read(2), 'big')
         self.rlen = int.from_bytes(reader.read(2), 'big')
         
-        self.ilen = int.from_bytes(reader.read(4), 'big')
-        self.instructions_padding = reader.read((4-(offset+reader.tell())) % 4)
+        ninstructions = int.from_bytes(reader.read(4), 'big') #implied by len of the array
+        #self.instructions_padding = reader.read((4-(offset+reader.tell())) % 4)
+        reader.read((4-(offset+reader.tell())) % 4) #implied by position in file
         self.instructions = list()
-        for i in range(self.ilen):
-            self.instructions.append(reader.read(4))
+        for i in range(ninstructions):
+            self.instructions.append(int.from_bytes(reader.read(4), 'big'))
             
-        self.npool = int.from_bytes(reader.read(4), 'big')
+        npool = int.from_bytes(reader.read(4), 'big') #implied by len of the array
         self.pool = list()
-        for i in range(self.npool):
+        for i in range(npool):
             self.pool.append(PoolRecord(reader))
             
-        self.nsymbols = int.from_bytes(reader.read(4), 'big')
+        nsymbols = int.from_bytes(reader.read(4), 'big') #implied by len of the array
         self.symbols = list()
-        for i in range(self.nsymbols):
-            symbol_size = int.from_bytes(reader.read(2), 'big')
-            self.symbols.append(symbol_size.to_bytes(2, 'big') + reader.read(symbol_size+1))
+        for i in range(nsymbols):
+            symbol_size = int.from_bytes(reader.read(2), 'big') #implied by len of the array
+            self.symbols.append(reader.read(symbol_size).decode("utf-8"))
+            reader.read(1) # always 0x00
         
 
 class IrepSection:
