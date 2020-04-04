@@ -115,10 +115,10 @@ for section in mruby.sections:
     if isinstance(section, UnknownSection):
         print("unknown section: ", section.bytes)
     else:
-        print("irep section: ", section.magic, ' size: ', section.size, 'version: ', section.version)
+        print("irep section: ", section.magic, ' version: ', section.version)
         for segment in section.segments:
             print("segment {");
-            print('size:', segment.size, 'nlocals:', segment.nlocals, 'nregs:', segment.nregs, 'rlen:', segment.rlen, 'symbols:', segment.symbols);
+            print('nlocals:', segment.nlocals, 'nregs:', segment.nregs, 'rlen:', segment.rlen, 'symbols:', segment.symbols);
             print('instructions {');
             for instr in segment.instructions:
                 print(instruction(instr))
