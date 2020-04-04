@@ -76,8 +76,11 @@ class IrepSegment:
         self.symbols = list()
         for i in range(nsymbols):
             symbol_size = int.from_bytes(reader.read(2), 'big') #implied by len of the array
-            self.symbols.append(reader.read(symbol_size).decode("utf-8"))
-            reader.read(1) # always 0x00
+            if(symbol_size == 0xFFFF):
+                self.symbols.append('') #null symbol
+            else:
+                self.symbols.append(reader.read(symbol_size).decode("utf-8"))
+                reader.read(1) # always 0x00
         
     def serialize(self, offset = 0):
         result = bytearray(self.size.to_bytes(4, 'big'))
@@ -100,9 +103,12 @@ class IrepSegment:
             
         result += len(self.symbols).to_bytes(4, 'big')
         for symbol in self.symbols:
-            result += len(symbol).to_bytes(2, 'big')
-            result += symbol.encode("utf-8")
-            result += b'\0'
+            if len(symbol) == 0:
+                result += (0xFFFF).to_bytes(2, 'big')
+            else:
+                result += len(symbol).to_bytes(2, 'big')
+                result += symbol.encode("utf-8")
+                result += b'\0'
         
         #update reported size, because it does not match actul size
         result[0:4] = (len(result)+4-padding_bytes_required).to_bytes(4, 'big')
