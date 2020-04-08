@@ -256,11 +256,7 @@ data012.cpk:
   ph2\p200.dat
   ph3\p300.dat
   phf\pf10.dat
-  phf\pf20.dat
   phf\pf31.dat
-  phf\pf40.dat
-  phf\pf50.dat
-  phf\pfa0.dat
   st1\r110.dat
   st1\r130.dat
   st1\r140.dat
@@ -268,25 +264,13 @@ data012.cpk:
   st1\r160.dat
   st1\r170.dat
   st2\r200.dat
-  st5\r520.dat
   st5\r530.dat
-  quest\q000.dat
-  quest\q001.dat
-  quest\q001_1.dat
-  quest\q002.dat
-  quest\q003.dat
-  quest\q004.dat
-  quest\q004_1.dat
-  quest\q005.dat
-  quest\q005_1.dat
-  quest\q006.dat
   quest\q020.dat
   quest\q031.dat
   quest\q032.dat
   quest\q040.dat
   quest\q070.dat
   quest\q071.dat
-  quest\q072.dat
   quest\q100.dat
   quest\q101.dat
   quest\q102.dat
@@ -306,19 +290,11 @@ data012.cpk:
   quest\q171.dat
   quest\q180.dat
   quest\q181.dat
-  quest\q200.dat
   quest\q210.dat
   quest\q220.dat
   quest\q221.dat
   quest\q222.dat
-  quest\q223.dat
-  quest\q230.dat
-  quest\q240.dat
-  quest\q250.dat
   quest\q290.dat
-  quest\q291.dat
-  quest\q292.dat
-  quest\q2ff.dat
   quest\q300.dat
   quest\q330.dat
   quest\q340.dat
@@ -345,200 +321,32 @@ data012.cpk:
   quest\q680.dat
   quest\q720.dat
   quest\q770.dat
-  quest\q790.dat
   quest\q800.dat
   quest\q801.dat
-  quest\q802.dat
   quest\q900.dat
   quest\q910.dat
   quest\q920.dat
-  quest\qa00.dat
-  quest\qa01.dat
-  quest\qa02.dat
-  quest\qa03.dat
-  quest\qa04.dat
-  quest\qa05.dat
-  quest\qa06.dat
-  quest\qa07.dat
-  quest\qa08.dat
-  quest\qa09.dat
-  quest\qa0a.dat
-  quest\qa0b.dat
-  quest\qa0c.dat
-  quest\qa0d.dat
-  quest\qa0e.dat
-  quest\qa0f.dat
-  quest\qa10.dat
-  quest\qa11.dat
-  quest\qa12.dat
-  quest\qa13.dat
-  quest\qa14.dat
-  quest\qa15.dat
-  quest\qa16.dat
-  quest\qa17.dat
-  quest\qa18.dat
-  quest\qa19.dat
-  quest\qa1a.dat
-  quest\qa1b.dat
-  quest\qa1c.dat
-  quest\qa20.dat
-  quest\qa21.dat
-  quest\qa22.dat
-  quest\qa23.dat
-  quest\qa24.dat
-  quest\qa25.dat
-  quest\qa26.dat
-  quest\qa27.dat
-  quest\qa28.dat
-  quest\qa29.dat
-  quest\qa2a.dat
-  quest\qa2b.dat
-  quest\qa2c.dat
-  quest\qa2d.dat
-  quest\qa2e.dat
-  quest\qa2f.dat
-  quest\qa30.dat
-  quest\qa31.dat
-  quest\qa32.dat
-  quest\qa40.dat
-  quest\qa41.dat
-  quest\qa42.dat
-  quest\qa43.dat
-  quest\qa44.dat
-  quest\qa45.dat
-  quest\qa46.dat
-  quest\qa47.dat
-  quest\qa48.dat
-  quest\qa49.dat
-  quest\qa4a.dat
-  quest\qa4b.dat
-  quest\qa4c.dat
-  quest\qa4d.dat
-  quest\qa4e.dat
-  quest\qa4f.dat
-  quest\qa50.dat
-  quest\qa51.dat
-  quest\qa52.dat
-  quest\qa53.dat
-  quest\qa54.dat
-  quest\qa55.dat
-  quest\qa56.dat
-  quest\qa57.dat
-  quest\qaa0.dat
-  quest\qaa1.dat
-  quest\qaa2.dat
-  quest\qaa3.dat
-  quest\qaa4.dat
-  quest\qaa5.dat
-  quest\qaa6.dat
-  quest\qaa7.dat
-  quest\qaa8.dat
-  quest\qaa9.dat
-  quest\qaaa.dat
-  quest\qaac.dat
-  quest\qaad.dat
-  quest\qab0.dat
-  quest\qab1.dat
   quest\qab2.dat
   quest\qab3.dat
-  quest\qab4.dat
   quest\qab5.dat
   quest\qab6.dat
   quest\qaba.dat
   quest\qabb.dat
-  quest\qabc.dat
   quest\qabd.dat
-  quest\qabe.dat
-  quest\qabf.dat
-  quest\qac0.dat
-  quest\qac1.dat
-  quest\qac2.dat
-  quest\qac3.dat
-  quest\qac4.dat
-  quest\qac5.dat
-  quest\qac6.dat
-  quest\qac7.dat
   quest\qac8.dat
-  quest\qac9.dat
-  quest\qaca.dat
-  quest\qacb.dat
-  quest\qacc.dat
-  quest\qacd.dat
-  quest\qace.dat
-  quest\qacf.dat
   quest\qad0.dat
   quest\qad1.dat
   quest\qad2.dat
-  quest\qad3.dat
-  quest\qad4.dat
-  quest\qad5.dat
   quest\qad6.dat
-  quest\qad7.dat
-  quest\qad8.dat
-  quest\qad9.dat
-  quest\qada.dat
-  quest\qadb.dat
-  quest\qadc.dat
-  quest\qadd.dat
-  quest\qade.dat
-  quest\qadf.dat
-  quest\qae0.dat
-  quest\qae1.dat
-  quest\qae2.dat
-  quest\qae3.dat
-  quest\qae4.dat
-  quest\qae5.dat
-  quest\qae6.dat
-  quest\qae7.dat
-  quest\qae8.dat
-  quest\qae9.dat
-  quest\qaea.dat
   quest\qaeb.dat
-  quest\qaec.dat
-  quest\qaed.dat
-  quest\qaee.dat
   quest\qaef.dat
-  quest\qaf0.dat
-  quest\qaf1.dat
-  quest\qaf2.dat
-  quest\qaf3.dat
   quest\qaf4.dat
-  quest\qaf5.dat
-  quest\qaf6.dat
-  quest\qaf7.dat
-  quest\qaf8.dat
-  quest\qaf9.dat
-  quest\qafa.dat
-  quest\qb00.dat
-  quest\qb10.dat
   quest\qb20.dat
-  quest\qb30.dat
-  quest\qb31.dat
-  quest\qb32.dat
   quest\qb40.dat
-  quest\qb50.dat
-  quest\qb70.dat
-  quest\qb80.dat
-  quest\qb85.dat
-  quest\qb90.dat
-  quest\qb95.dat
-  quest\qc00.dat
-  quest\qc01.dat
-  quest\qc02.dat
   quest\qc10.dat
   quest\qc11.dat
   quest\qc12.dat
-  quest\qc13.dat
-  quest\qc14.dat
-  quest\qc20.dat
-  quest\qc21.dat
-  quest\qc22.dat
   quest\qc30.dat
-  quest\qc40.dat
-  quest\qe04.dat
-  quest\qe05.dat
-  quest\qf00.dat
-  quest\qf01.dat
 
 data013.cpk:
   wd1\g11516.dat
@@ -562,17 +370,10 @@ data100.cpk:
   ph4\p400.dat
   phf\pf60.dat
   quest\q080.dat
-  quest\q085.dat
-  quest\q086.dat
   quest\q090.dat
   quest\q091.dat
   quest\q092.dat
   quest\q095.dat
-  quest\qa60.dat
-  quest\qa61.dat
-  quest\qa62.dat
-  quest\qa63.dat
-  quest\qa64.dat
   quest\qc50.dat
   novel\M5095_S0020_N_eng.txt
   novel\M5095_S0025_N_eng.txt
