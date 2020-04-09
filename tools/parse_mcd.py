@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import argparse
+import itertools
 from mcdfile import McdFile
 
 parser = argparse.ArgumentParser()
@@ -11,41 +12,23 @@ file = open(args.file, "rb")
 
 mcd = McdFile(file)
 
-print('header: ', vars(mcd.header))
+#using '{' and '}' for tagging -hopefully it doesn't break anything
 
-print('symbols {')
-for s in mcd.symbols:
-    print(vars(s))
-print('} //symbols')
-
-print('glyphs {')
-for s in mcd.glyphs:
-    print(vars(s))
-print('} //glyphs')
-
-print('glyph_properties {')
-for s in mcd.glyph_properties:
-    print(vars(s))
-print('} //glyph_properties')
-
-print('messages {')
 for s in mcd.messages:
-    print(vars(s))
-    print('lines {')
+    matching_events = list(filter(lambda e: e.id == s.event_id, mcd.events))
+    assert(len(matching_events) == 1)
+    event = matching_events[0].name
+    
+    result = ''
     for l in s.lines:
-        print(vars(l))
-        print('texts {')
         for t in l.texts:
-            print(vars(t))
-            print('content {')
             for v in t.content:
-                print(vars(v))
-            print('} //content')
-        print('} //texts')
-    print('} //lines')
-print('} //messages')
-
-print('events {')
-for s in mcd.events:
-    print(vars(s))
-print('} //events')
+                if v.char_id < 0x8000:
+                    result += mcd.symbols[v.char_id].char
+                elif v.char_id == 0x8001:
+                    result += ' '
+                else:
+                    result += '{unknown'+str(v.char_id)+'}'
+            if len(l.texts) > 1: result += '{nexttext}'
+        if len(s.lines) > 1: result += '{nextline}'
+    print(event+'\t'+repr(result)+'\t'+args.file)
