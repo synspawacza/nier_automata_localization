@@ -8,6 +8,16 @@ data002.cpk:
   st1\r120.dat
 
 data009.cpk:
+  font\font_00.dat
+  font\font_00.dtt
+  font\font_01.dat
+  font\font_01.dtt
+  font\font_04.dat
+  font\font_04.dtt
+  font\font_05.dat
+  font\font_05.dtt
+  font\font_11.dat
+  font\font_11.dtt
   subtitle\subtitle0010_us.dat
   subtitle\subtitle0011_us.dat
   subtitle\subtitle0030_us.dat
