@@ -56,6 +56,9 @@ class DatArchive:
         raw_names = byte_reader.read(self.header.file_count * self.max_filename_len);
         names = [raw_names[i*self.max_filename_len:(i+1)*self.max_filename_len].decode("utf-8").rstrip('\0')  for i in range(0, self.header.file_count)]
         
+        byte_reader.seek(self.header.crc_table_offset)
+        self.crc_table = byte_reader.read(file_offsets[0] - self.header.crc_table_offset)
+        
         self.files = [FileEntry(names[i], exts[i], file_offsets[i], file_sizes[i], byte_reader) for i in range(0, self.header.file_count)]
     
     
@@ -92,7 +95,7 @@ class DatArchive:
         
         crc_table_offset = len(result)
         result[24:24+4] = crc_table_offset.to_bytes(4, 'little')
-        result += (b'\x99' + b'\0'*15)*file_count # dummy crc
+        result += self.crc_table # keep the same CRC
         
         #pad with zeroes to mod 16
         padding_length = 16-(len(result) % 16)
