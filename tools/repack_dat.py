@@ -2,29 +2,23 @@
 
 import argparse
 import os
-from datarchive import DatArchive
+import format.dat as dat
 
 parser = argparse.ArgumentParser()
 parser.add_argument("input_file", help=".dat or .dtt file name")
-parser.add_argument("replacement_file", help="replacement file name")
 parser.add_argument("output_file", help="output .dat or .dtt file name")
+parser.add_argument("replacement_files", help="files to replace in ", nargs="+")
 
 
 args = parser.parse_args()
 
 file = open(args.input_file, "rb")
-dat = DatArchive(file)
-#out_dir = args.directory
-#
-#
-#for f in dat.files:
-#    with open(os.path.join(args.directory, f.name), "wb") as out_file:
-#        file.seek(f.offset)
-#        content = file.read(f.size)
-#        out_file.write(content)
+dat = dat.File.parse(file)
 
-for f in filter(lambda f: f.name == os.path.basename(args.replacement_file), dat.files):
-    f.bytes = open(args.replacement_file, "rb").read()
+for f in dat.files:
+    for replacement_file in args.replacement_files:
+        if os.path.basename(replacement_file) == f.name:
+            f.bytes = open(replacement_file, "rb").read()
 
 out_file = open(args.output_file, "wb")
 out_file.write(dat.serialize())
