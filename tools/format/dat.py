@@ -13,6 +13,7 @@ class Header:
     def parse(reader):
         result = Header()
         result.magic = read_bytes(reader, 4)
+        assert_magic(result.magic, b'DAT\0')
         result.file_count = read_int(reader, 4)
         result.file_table_offset = read_int(reader, 4)
         result.ext_table_offset = read_int(reader, 4)
@@ -66,9 +67,12 @@ class File:
             result.files[i].name = read_utf8(reader, filename_len)
 
         reader.seek(result.header.crc_table_offset)
-        result.crc_table = read_bytes(
-            reader, result.files[0].offset - result.header.crc_table_offset
-        )
+        if len(result.files) > 0:
+            result.crc_table = read_bytes(
+                reader, result.files[0].offset - result.header.crc_table_offset
+            )
+        else:
+            result.crc_table = b''
 
         for i in range(result.header.file_count):
             reader.seek(result.files[i].offset)

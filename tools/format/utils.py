@@ -1,5 +1,10 @@
 #!/usr/bin/python3
 
+def assert_magic(magic, reference):
+    l = len(reference)
+    if magic[0:l] != reference:
+        raise Exception("Invalid magic value in file: expected "+ reference.hex() +", was: "+magic[0:l].hex())
+
 
 def read_bytes(reader, byte_count):
     return reader.read(byte_count)

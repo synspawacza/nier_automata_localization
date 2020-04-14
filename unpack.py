@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
 import sys
-sys.path.append('./tools')
+
+sys.path.append("./tools")
 
 import argparse
 import os
@@ -10,9 +11,9 @@ import format.dat as dat
 import format.wta as wta
 
 parser = argparse.ArgumentParser(
-    description='Upacks .dat and .dtt files and wta/wtp into dds',
+    description="Upacks .dat and .dtt files and wta/wtp into dds",
     formatter_class=argparse.RawDescriptionHelpFormatter,
-    epilog='''
+    epilog="""
 Files will be placed into respecive directories, e.g. for following situation:
 
 ./dat/
@@ -20,7 +21,7 @@ Files will be placed into respecive directories, e.g. for following situation:
   abc.dtt
   other.txt
 
-command `./unpack.py dat out` will create following directory structure:
+command `./unpack.py --input dat --output out` will create following directory structure:
 
 ./out/
   abc.dat/
@@ -35,20 +36,23 @@ command `./unpack.py dat out` will create following directory structure:
   other.txt
 
 Please note that xyz.wta and xyz.wtp containing texture data will be extracted furher into xyz.wtp_00*.dds files
-''')
-parser.add_argument("input", help="input file or directory")
-parser.add_argument("output", help="output directory")
+""",
+)
+parser.add_argument("--input", help="input file or directory", default="data")
+parser.add_argument("--output", help="output directory", default="unpacked")
 parser.add_argument("--depth", help="recursion depth (default=5)", default=5, type=int)
+
 
 def ensure_dir(output_dir):
     if os.path.isfile(output_dir):
         raise Exception("Unable to extract to " + output_dir + ": not a directory")
     if not os.path.isdir(output_dir):
         os.mkdir(output_dir)
-        
+
+
 def unpack_wtp(wtp_filename, wta_filename):
     if not os.path.isfile(wtp_filename) or not os.path.isfile(wta_filename):
-        return # skip if not exist
+        return  # skip if not exist
 
     with open(wta_filename, "rb") as wta_file:
         with open(wtp_filename, "rb") as wtp_file:
@@ -60,6 +64,7 @@ def unpack_wtp(wtp_filename, wta_filename):
                     content = wtp_file.read(f.size)
                     out_file.write(content)
 
+
 def unpack_dat(input_file, output_dir):
     ensure_dir(output_dir)
     with open(input_file, "rb") as file:
@@ -68,36 +73,44 @@ def unpack_dat(input_file, output_dir):
             output_file = os.path.join(output_dir, f.name)
             with open(output_file, "wb") as out_file:
                 out_file.write(f.bytes)
-                if os.path.splitext(output_file)[1] == '.wtp':
-                    unpack_wtp(output_file, output_file.replace('.wtp' ,'.wta').replace('.dtt' ,'.dat'))
+            if os.path.splitext(output_file)[1] == ".wtp":
+                unpack_wtp(
+                    output_file,
+                    output_file.replace(".wtp", ".wta").replace(".dtt", ".dat"),
+                )
+
 
 def unpack_dir(input_dir, output_dir, depth):
     if depth <= 0:
         return
-        
+
     ensure_dir(output_dir)
     for entry in os.scandir(input_dir):
         if entry.is_dir():
-            unpack_dir(entry.path, os.path.join(output_dir, entry.name), depth-1)
+            unpack_dir(entry.path, os.path.join(output_dir, entry.name), depth - 1)
         else:
             unpack_file(entry.path, output_dir)
+
 
 def unpack_file(input_file, output_dir):
     ensure_dir(output_dir)
     ext = os.path.splitext(input_file)[1]
-    if ext in {'.dat', '.dtt'}:
+    if ext in {".dat", ".dtt"}:
         unpack_dat(input_file, os.path.join(output_dir, os.path.basename(input_file)))
     else:
-        shutil.copyfile(input_file, os.path.join(output_dir, os.path.basename(input_file)))
+        shutil.copyfile(
+            input_file, os.path.join(output_dir, os.path.basename(input_file))
+        )
+
 
 if __name__ == "__main__":
     args = parser.parse_args()
     input = args.input
     output = args.output
-    
+
     if os.path.isfile(output):
         raise Exception(output + " should be a directory")
-    
+
     if os.path.isfile(input):
         unpack_file(input, output)
     elif os.path.isdir(input):

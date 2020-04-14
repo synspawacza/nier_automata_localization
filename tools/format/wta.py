@@ -10,6 +10,7 @@ class Header:
     def parse(reader):
         result = Header()
         result.magic = read_bytes(reader, 8)
+        assert_magic(result.magic, b'WTB\0')
         result.textures_count = read_int(reader, 4)
         result.offsets_offset = read_int(reader, 4)
         result.size_offset = read_int(reader, 4)
