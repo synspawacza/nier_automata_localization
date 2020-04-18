@@ -1,9 +1,17 @@
 #!/usr/bin/python3
 
+import struct
+
+
 def assert_magic(magic, reference):
     l = len(reference)
     if magic[0:l] != reference:
-        raise Exception("Invalid magic value in file: expected "+ reference.hex() +", was: "+magic[0:l].hex())
+        raise Exception(
+            "Invalid magic value in file: expected "
+            + reference.hex()
+            + ", was: "
+            + magic[0:l].hex()
+        )
 
 
 def read_bytes(reader, byte_count):
@@ -15,7 +23,18 @@ def read_int(reader, byte_count):
 
 
 def write_int(value, byte_count):
-    return value.to_bytes(byte_count, "little", signed=True)
+    if value < 0:
+        return value.to_bytes(byte_count, "little", signed=True)
+    else:
+        return value.to_bytes(byte_count, "little", signed=False)
+
+
+def read_float(reader):
+    return struct.unpack("f", reader.read(4))[0]
+
+
+def write_float(value):
+    return struct.pack("f", value)
 
 
 def read_utf8(reader, byte_count):
@@ -49,3 +68,11 @@ def write_padding(offset, mod):
         return b"\0" * padding_size
     else:
         return b""
+
+
+def calc_eager_padding(offset, mod):
+    return mod - (offset % mod)
+
+
+def write_eager_padding(offset, mod):
+    return b"\0" * calc_eager_padding(offset, mod)
