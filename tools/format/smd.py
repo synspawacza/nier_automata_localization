@@ -39,3 +39,9 @@ class File:
         for e in self.entries:
             result += e.serialize()
         return result
+
+    def get_strings(self):
+        result = dict()
+        for e in self.entries:
+            result[e.id] = e.text
+        return result

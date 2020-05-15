@@ -229,6 +229,26 @@ class Line:
         result += write_float(self.horiz)
         return result
 
+    def as_string(self, symbols):
+        result = ""
+        idx = 0
+        while idx < len(self.content):
+            char_id = self.content[idx]
+            if char_id < 0x8000:
+                result += symbols[char_id].char
+                idx += 2  # skip kerning
+            elif char_id == 0x8001:
+                result += " "
+                idx += 2  # skip kerning
+            elif char_id == 0x8000:
+                # text end
+                idx += 1
+            else:
+                # using '<' and '>' for tagging - hopefully it doesn't break anything
+                result += "<char" + str(char_id) + ">"
+                idx += 2  # skip kerning
+        return result
+
 
 class File:
     @staticmethod
@@ -360,4 +380,16 @@ class File:
         for event in self.events:
             result += event.serialize()
 
+        return result
+
+    def get_strings(self):
+        result = dict()
+        for msg in self.messages:
+            matching_events = list(filter(lambda e: e.id == msg.event_id, self.events))
+            assert len(matching_events) == 1
+            event = matching_events[0].name
+
+            # using first text - other texts have the same content, but using different font
+            lines = [line.as_string(self.symbols) for line in msg.texts[0].lines]
+            result[event] = "\n".join(lines)
         return result

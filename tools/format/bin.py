@@ -25,6 +25,19 @@ def mruby_op_string(index, pool_id):
     return (index << 23) | (pool_id << 7) | 0x3D
 
 
+def mruby_opcode(value):
+    return value & 0x7F
+
+
+def get_bx(value):
+    return (value >> 7) & 0xFFFF
+
+
+OP_SETCONST = 0x12
+OP_ARRAY = 0x37
+OP_STRING = 0x3D
+
+
 class Header:
     @staticmethod
     def parse(reader):
@@ -204,4 +217,33 @@ class File:
             result += section.serialize(len(result))
         result[10:14] = write_be_int(len(result), 4)
         result[8:10] = write_be_int(calc_crc(result[10:]), 2)
+        return result
+
+    def get_strings(self):
+        result = dict()
+
+        LANG_INDEX = 1  # JP=0, EN=1 FR=2 IT=3 DE=4 ES=5
+
+        for section in self.sections:
+            if not isinstance(section, IrepSection):
+                continue
+            for segment in section.segments:
+                for instr_idx, instr in enumerate(segment.instructions):
+                    array_size = 0
+                    if instr == 0x804437:  # OP_ARRAY 1 1 8
+                        array_size = 8
+                    elif instr == 0x804337:  # OP_ARRAY 1 1 6
+                        array_size = 6
+                    else:
+                        continue
+
+                    symbol_instr = segment.instructions[instr_idx + 1]
+                    assert mruby_opcode(symbol_instr) == OP_SETCONST
+                    symbol = segment.symbols[get_bx(symbol_instr)]
+
+                    str_instr = segment.instructions[
+                        instr_idx - array_size + LANG_INDEX
+                    ]
+                    result[symbol] = segment.pool[get_bx(str_instr)].value
+
         return result
