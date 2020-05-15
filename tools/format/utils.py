@@ -18,6 +18,13 @@ def read_bytes(reader, byte_count):
     return reader.read(byte_count)
 
 
+def peek_bytes(reader, byte_count):
+    pos = reader.tell()
+    bytes = reader.read(byte_count)
+    reader.seek(pos)
+    return bytes
+
+
 def read_int(reader, byte_count):
     return int.from_bytes(reader.read(byte_count), "little", signed=True)
 
@@ -27,6 +34,17 @@ def write_int(value, byte_count):
         return value.to_bytes(byte_count, "little", signed=True)
     else:
         return value.to_bytes(byte_count, "little", signed=False)
+
+
+def read_be_int(reader, byte_count):  # big endian
+    return int.from_bytes(reader.read(byte_count), "big", signed=True)
+
+
+def write_be_int(value, byte_count):  # big endian
+    if value < 0:
+        return value.to_bytes(byte_count, "big", signed=True)
+    else:
+        return value.to_bytes(byte_count, "big", signed=False)
 
 
 def read_float(reader):
