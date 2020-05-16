@@ -246,4 +246,4 @@ class File:
                     ]
                     result[symbol] = segment.pool[get_bx(str_instr)].value
 
-        return result
+        return dict(sorted(result.items()))
