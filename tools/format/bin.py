@@ -219,10 +219,11 @@ class File:
         result[8:10] = write_be_int(calc_crc(result[10:]), 2)
         return result
 
-    def get_strings(self):
+    def get_strings(self, lang):
         result = dict()
 
-        LANG_INDEX = 1  # JP=0, EN=1 FR=2 IT=3 DE=4 ES=5
+        LANGS = {"jp": 0, "en": 1, "fr": 2, "it": 3, "de": 4, "es": 5}
+        lang_index = LANGS[lang]
 
         for section in self.sections:
             if not isinstance(section, IrepSection):
@@ -242,7 +243,7 @@ class File:
                     symbol = segment.symbols[get_bx(symbol_instr)]
 
                     str_instr = segment.instructions[
-                        instr_idx - array_size + LANG_INDEX
+                        instr_idx - array_size + lang_index
                     ]
                     result[symbol] = segment.pool[get_bx(str_instr)].value
 

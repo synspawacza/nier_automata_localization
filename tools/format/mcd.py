@@ -382,7 +382,7 @@ class File:
 
         return result
 
-    def get_strings(self):
+    def get_strings(self, lang):
         result = dict()
         for msg in self.messages:
             matching_events = list(filter(lambda e: e.id == msg.event_id, self.events))

@@ -4,11 +4,11 @@ from io import TextIOWrapper
 
 # java .properties file subset:
 # no comments
-# key has only ascii characters
+# key has only ASCII characters
 # : and = are not allowed in key, even escaped
 # = is always key-value separator
 # no multiline (no escaping endline terminator)
-# all non-ascii characters are escaped
+# all non-ASCII characters are escaped (keep_non_ascii=True will use UTF-8 rather than ASCII encoding)
 # there are no characters outside Unicode BMP (no surogate pairs/32-bit characters)
 
 
@@ -26,12 +26,12 @@ def parse_properties(reader):
 
 
 # escape manually, as python will use \xhh rather than \u00hh
-def escape_nonascii(text):
+def escape_nonascii(text, keep_non_ascii=False):
     result = ""
     for c in text:
         if ord(c) >= 0x10000:
             raise Exception("Unsupported character: U+{:x}".format(ord(c)))
-        if ord(c) >= 0x7F:
+        if ord(c) >= 0x7F and not keep_non_ascii:
             result += "\\u{:04x}".format(ord(c))
         elif c == "\t":
             result += "\\t"
@@ -48,8 +48,10 @@ def escape_nonascii(text):
     return result
 
 
-def serialize_properties(kv):
+def serialize_properties(kv, keep_non_ascii=False):
     result = bytearray()
     for key, value in kv.items():
-        result += (escape_nonascii(key + "=" + value) + "\n").encode("utf-8")
+        result += (escape_nonascii(key + "=" + value, keep_non_ascii) + "\n").encode(
+            "utf-8"
+        )
     return result

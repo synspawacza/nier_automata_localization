@@ -44,7 +44,7 @@ class File:
             result += e.serialize()
         return result
 
-    def get_strings(self):
+    def get_strings(self, lang):
         result = dict()
         for e in self.entries:
             result[e.id] = e.text
