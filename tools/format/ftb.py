@@ -8,7 +8,7 @@ class Header:
     def parse(reader):
         result = Header()
         result.magic = read_bytes(reader, 118)
-        assert_magic(result.magic, b'FTB ')
+        assert_magic(result.magic, b"FTB ")
         result.textures_count = read_int(reader, 2)
         result.unknown = read_bytes(reader, 2)
         result.chars_count = read_int(reader, 2)
