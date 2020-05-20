@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from format.utils import *
+from types import SimpleNamespace as ns
 
 
 class Header:
@@ -77,6 +78,18 @@ class File:
         char.u = u
         char.v = v
         self.chars.append(char)
+
+    def get_glyphs(self, textures, font_id=0):  # font_id is ignored
+        result = {}
+        for c in self.chars:
+            if c.width == 0 or c.height == 0 or not c.char:
+                continue
+            u1 = c.u
+            u2 = c.u + c.width + 1
+            v1 = c.v
+            v2 = c.v + c.height + 1
+            result[c.char] = textures[c.texture_id].crop((u1, v1, u2, v2))
+        return result
 
     def serialize(self):
         result = bytearray()

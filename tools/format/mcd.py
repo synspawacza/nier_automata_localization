@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from format.utils import *
+from types import SimpleNamespace as ns
 
 # based on https://zenhax.com/viewtopic.php?t=1502&p=8181
 # based on https://github.com/Kerilk/bayonetta_tools/blob/master/binary_templates/Bayonetta%202%20mcd%20base.bt
@@ -162,6 +163,10 @@ class Message:
         result += write_int(self.event_id, 4)
         return result
 
+    def as_string(self, symbols):
+        # using first text - other texts have the same content, but using different font
+        return self.texts[0].as_string(symbols)
+
 
 class Text:
     ENTRY_SIZE = 20
@@ -192,6 +197,9 @@ class Text:
         result += write_int(self.hpos, 4)
         result += write_int(self.font, 4)
         return result
+
+    def as_string(self, symbols):
+        return "\n".join([line.as_string(symbols) for line in self.lines])
 
 
 class Line:
@@ -388,8 +396,19 @@ class File:
             matching_events = list(filter(lambda e: e.id == msg.event_id, self.events))
             assert len(matching_events) == 1
             event = matching_events[0].name
+            result[event] = msg.as_string(self.symbols)
+        return result
 
-            # using first text - other texts have the same content, but using different font
-            lines = [line.as_string(self.symbols) for line in msg.texts[0].lines]
-            result[event] = "\n".join(lines)
+    def get_glyphs(self, textures, font_id):
+        result = {}
+        for symbol in self.symbols:
+            if symbol.font_id != font_id:
+                continue
+            glyph = self.glyphs[symbol.glyph_id]
+            texture = textures[0]
+            u1 = glyph.u1 * texture.width
+            u2 = glyph.u2 * texture.width
+            v1 = glyph.v1 * texture.height
+            v2 = glyph.v2 * texture.height
+            result[symbol.char] = texture.crop((u1, v1, u2, v2))
         return result
