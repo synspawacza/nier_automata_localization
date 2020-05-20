@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 from format.utils import *
-from types import SimpleNamespace as ns
 
 # based on https://zenhax.com/viewtopic.php?t=1502&p=8181
 # based on https://github.com/Kerilk/bayonetta_tools/blob/master/binary_templates/Bayonetta%202%20mcd%20base.bt
@@ -247,7 +246,7 @@ class Line:
                 idx += 2  # skip kerning
             elif char_id == 0x8001:
                 result += " "
-                idx += 2  # skip kerning
+                idx += 2  # skip font id
             elif char_id == 0x8000:
                 # text end
                 idx += 1

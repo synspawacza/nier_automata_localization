@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 from format.utils import *
-from types import SimpleNamespace as ns
 
 
 class Header:

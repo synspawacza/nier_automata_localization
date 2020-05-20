@@ -20,6 +20,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--font-id", help="font number (relevant for .mcd)", default=0, type=int
     )
+    parser.add_argument(
+        "--char", help="extract only the character specified by code point", type=int
+    )
     parser.add_argument("font_file", help=".ftb or .mcd file name")
     parser.add_argument(
         "directory", help="output directory that will contain separated glyphs"
@@ -45,7 +48,7 @@ if __name__ == "__main__":
         if len(args.image_files) != 1:
             raise Exception(
                 "Invalid number of image files: was {0}, expected 1".format(
-                    len(image_files)
+                    len(args.image_files)
                 )
             )
     else:
@@ -58,6 +61,8 @@ if __name__ == "__main__":
     ensure_dir(args.directory)
 
     for char, glyph in parsed.get_glyphs(textures, args.font_id).items():
+        if args.char and args.char != ord(char):
+            continue
         if args.skip_cjk and ord(char) >= 0x2E80 and ord(char) <= 0x9FFF:
             continue
         outfile = os.path.join(args.directory, "{0:04x}.png".format(ord(char)))
