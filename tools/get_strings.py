@@ -7,6 +7,7 @@ import format.smd as smd
 import format.tmd as tmd
 import format.bin as bin
 import format.mcd as mcd
+import format.pak as pak
 import format.properties as properties
 
 
@@ -28,6 +29,8 @@ def extract_strings_to_file(
             parsed = tmd.File.parse(in_file)
         elif file_ext == ".mcd":
             parsed = mcd.File.parse(in_file)
+        elif file_ext == ".pak":
+            parsed = pak.File.parse(in_file)
         else:
             raise Exception(
                 "Unable to extract " + input_filename + ": unknown file extenstion"

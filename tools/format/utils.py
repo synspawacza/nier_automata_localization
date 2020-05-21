@@ -29,6 +29,10 @@ def read_int(reader, byte_count):
     return int.from_bytes(reader.read(byte_count), "little", signed=True)
 
 
+def read_uint(reader, byte_count):
+    return int.from_bytes(reader.read(byte_count), "little", signed=False)
+
+
 def write_int(value, byte_count):
     if value < 0:
         return value.to_bytes(byte_count, "little", signed=True)
@@ -57,6 +61,15 @@ def write_float(value):
 
 def read_utf8(reader, byte_count):
     return reader.read(byte_count).decode("utf-8").rstrip("\0")
+
+
+def read_zero_terminated_utf8(reader):
+    init_offset = reader.tell()
+    while reader.read(1) not in {b"\0", b""}:
+        pass
+    byte_count = reader.tell() - init_offset
+    reader.seek(init_offset)
+    return read_utf8(reader, byte_count)
 
 
 def write_utf8(value, byte_count):
