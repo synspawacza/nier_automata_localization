@@ -56,4 +56,4 @@ extract_mcd_with_cjk unpacked/ui/ui_loading.dat/messloading.mcd 05
 ./tools/unpack_font.py --char $((16#2514)) --font-id 36 unpacked/ui/ui_chapter_us.dat/messchapter.mcd fonts/01 unpacked/ui/ui_chapter_us.dtt/messchapter.wtp_000.dds
 ./tools/unpack_font.py --char $((16#251c)) --font-id 36 unpacked/ui/ui_chapter_us.dat/messchapter.mcd fonts/01 unpacked/ui/ui_chapter_us.dtt/messchapter.wtp_000.dds
 
-#TODO: get_strings
+./get_strings.sh

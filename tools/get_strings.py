@@ -48,7 +48,7 @@ if __name__ == "__main__":
     parser.add_argument("output", help="target file name (*.properties)")
     parser.add_argument(
         "--lang",
-        help="source laguage (default: en, affects only .bin files)",
+        help="source laguage (default: en, affects only .bin and .pak files)",
         default="en",
     )
     parser.add_argument(
