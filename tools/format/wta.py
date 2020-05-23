@@ -65,9 +65,11 @@ class File:
         for i in range(result.header.textures_count):
             result.textures[i].idx = read_bytes(reader, 4)
 
-        reader.seek(result.header.info_offset)
-        for i in range(result.header.textures_count):
-            result.textures[i].info = read_bytes(reader, 20)
+        result.has_info_table = result.header.info_offset > 0
+        if result.has_info_table:
+            reader.seek(result.header.info_offset)
+            for i in range(result.header.textures_count):
+                result.textures[i].info = read_bytes(reader, 20)
 
         return result
 
@@ -99,12 +101,18 @@ class File:
         self.header.idx_offset = len(result)
         for texture in self.textures:
             result += texture.idx
-        result += write_padding(len(result), 32)
+        if self.has_info_table:
+            result += write_padding(len(result), 32)
+        else:
+            result += write_padding(len(result), 16)
 
-        self.header.info_offset = len(result)
-        for texture in self.textures:
-            result += texture.info
-        result += write_padding(len(result), 32)
+        if self.has_info_table:
+            self.header.info_offset = len(result)
+            for texture in self.textures:
+                result += texture.info
+            result += write_padding(len(result), 16)
+        else:
+            self.header.info_offset = 0
 
         result[0 : Header.HEADER_SIZE] = self.header.serialize()
 

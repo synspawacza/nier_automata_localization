@@ -68,15 +68,43 @@ class File:
             result.chars.append(Character.parse(reader))
         return result
 
+    def find_space_for_glyph(self, glyph_size, texture_size, page):
+        glyphs = [
+            (c.u, c.v, c.width, c.height) for c in self.chars if c.texture_id == page
+        ]
+        w = glyph_size[0]
+        h = glyph_size[1]
+        x = texture_size[0] - w - 1
+        y = texture_size[1] - h - 1
+
+        def collides_with_boxes(box, otherboxes):
+            x, y, w, h = box
+            for otherbox in otherboxes:
+                x2, y2, w2, h2 = otherbox
+                if x < x2 + w2 and x + w > x2 and y < y2 + h2 and y + h > y2:
+                    return True
+            return False
+
+        while not collides_with_boxes((x, y, w, h), glyphs) and y > 0:
+            y -= 1
+        y += 1
+        while not collides_with_boxes((x, y, w, h), glyphs) and x > 0:
+            x -= 1
+        x += 1
+        if not collides_with_boxes((x, y, w, h), glyphs):
+            return (x, y)
+        raise Exception("cannot place character")
+
     def add_character(self, value, texture, width, height, u, v):
         char = Character()
         char.char = value
         char.texture_id = texture
-        char.width = width
-        char.height = height
+        char.width = width - 1
+        char.height = height - 1
         char.u = u
         char.v = v
         self.chars.append(char)
+        self.chars.sort(key=lambda c: c.char)
 
     def get_glyphs(self, textures, font_id=0):  # font_id is ignored
         result = {}
