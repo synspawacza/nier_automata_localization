@@ -248,3 +248,33 @@ class File:
                     result[symbol] = segment.pool[get_bx(str_instr)].value
 
         return dict(sorted(result.items()))
+
+    def put_strings(self, lang, mapping):
+        LANGS = {"jp": 0, "en": 1, "fr": 2, "it": 3, "de": 4, "es": 5}
+        lang_index = LANGS[lang]
+
+        for section in self.sections:
+            if not isinstance(section, IrepSection):
+                continue
+            for segment in section.segments:
+                for instr_idx, instr in enumerate(segment.instructions):
+                    array_size = 0
+                    if instr == 0x804437:  # OP_ARRAY 1 1 8
+                        array_size = 8
+                    elif instr == 0x804337:  # OP_ARRAY 1 1 6
+                        array_size = 6
+                    else:
+                        continue
+
+                    symbol_instr = segment.instructions[instr_idx + 1]
+                    assert mruby_opcode(symbol_instr) == OP_SETCONST
+                    symbol = segment.symbols[get_bx(symbol_instr)]
+
+                    if (
+                        mapping[symbol]
+                        != segment.instructions[instr_idx - array_size + lang_index]
+                    ):
+                        segment.pool.append(PoolRecord.from_string(mapping[symbol]))
+                        segment.instructions[
+                            instr_idx - array_size + lang_index
+                        ] = mruby_op_string(2, len(segment.pool) - 1)

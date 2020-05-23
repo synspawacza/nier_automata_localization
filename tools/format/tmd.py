@@ -49,3 +49,7 @@ class File:
         for e in self.entries:
             result[e.id] = e.text
         return result
+
+    def put_strings(self, lang, mapping):
+        for e in self.entries:
+            e.text = mapping[e.id]

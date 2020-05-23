@@ -76,3 +76,32 @@ class File:
             elif line[2:5] == lang_id:
                 result[id] = line[6:]
         return result
+
+    def put_strings(self, lang, mapping):
+        LANGS = {
+            "jp": "JPN",
+            "en": "ENG",
+            "fr": "FRA",
+            "it": "ITA",
+            "de": "GER",
+            "es": "ESP",
+        }
+        lang_id = LANGS[lang]
+
+        character_names_table = bytes.fromhex(self.entries[0x1D77583401])[20:].decode(
+            "utf-8"
+        )
+        new_lines = []
+        for line in character_names_table.split("\n"):
+            if len(line) <= 2:
+                pass
+            elif line[1] != " ":
+                id = line.strip(" ")
+            elif line[2:5] == lang_id:
+                line = line[:6] + mapping[id]
+            new_lines.append(line)
+        new_string = "\n".join(new_lines).encode("utf-8").hex()
+
+        self.entries[0x1D77583401] = self.entries[0x1D77583401][:40] + new_string
+        strlen = len(self.entries[0x1D77583401]) // 2
+        self.entries[0xF7C0246A01] = "{:#x}".format(strlen)

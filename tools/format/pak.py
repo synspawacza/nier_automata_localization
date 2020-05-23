@@ -89,3 +89,8 @@ class File:
         return charnames.File.parse(BytesIO(self.segments[25].unzip())).get_strings(
             lang
         )
+
+    def put_strings(self, lang, mapping):
+        parsedcharnames = charnames.File.parse(BytesIO(self.segments[25].unzip()))
+        parsedcharnames.put_strings(lang, mapping)
+        self.segments[25].zip_and_put_data(parsedcharnames.serialize())
