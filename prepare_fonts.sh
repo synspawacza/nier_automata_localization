@@ -1,8 +1,5 @@
 #!/bin/bash
 
-echo "Unpacking dat files"
-./tools/unpack_dat.py data unpacked
-
 echo "Extracting fonts - it will take several minutes"
 echo "Extracting fonts from ftb files"
 for font in 00 01 04 05 11
@@ -56,4 +53,3 @@ extract_mcd_with_cjk unpacked/ui/ui_loading.dat/messloading.mcd 05
 ./tools/unpack_font.py --char $((16#2514)) --font-id 36 unpacked/ui/ui_chapter_us.dat/messchapter.mcd fonts/01 unpacked/ui/ui_chapter_us.dtt/messchapter.wtp_000.dds
 ./tools/unpack_font.py --char $((16#251c)) --font-id 36 unpacked/ui/ui_chapter_us.dat/messchapter.mcd fonts/01 unpacked/ui/ui_chapter_us.dtt/messchapter.wtp_000.dds
 
-./get_strings.sh
