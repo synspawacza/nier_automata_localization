@@ -22,10 +22,7 @@ if __name__ == "__main__":
         help="target texture file (cannot be .dds, but .png can be used)",
     )
     parser.add_argument(
-        "--page",
-        help="source laguage (default: en, affects only .bin and .pak files)",
-        required=True,
-        type=int,
+        "--page", help="texture number", required=True, type=int,
     )
     parser.add_argument(
         "--char",

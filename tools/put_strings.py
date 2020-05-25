@@ -39,8 +39,8 @@ def insert_strings_to_file(
     mapping = None
     with open(properties_filename, "rb") as properties_file:
         mapping = properties.parse_properties(properties_file)
-    
-    fonts = None # TODO - read from config file for mcd
+
+    fonts = None  # TODO - read from config file for mcd
 
     parsed.put_strings(mapping, lang, fonts)
 
