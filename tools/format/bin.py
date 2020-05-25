@@ -249,7 +249,7 @@ class File:
 
         return dict(sorted(result.items()))
 
-    def put_strings(self, lang, mapping):
+    def put_strings(self, mapping, lang, fonts):
         LANGS = {"jp": 0, "en": 1, "fr": 2, "it": 3, "de": 4, "es": 5}
         lang_index = LANGS[lang]
 
