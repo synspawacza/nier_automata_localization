@@ -90,7 +90,7 @@ class File:
             lang
         )
 
-    def put_strings(self, mapping, lang, fonts):
+    def put_strings(self, mapping, lang):
         parsedcharnames = charnames.File.parse(BytesIO(self.segments[25].unzip()))
         parsedcharnames.put_strings(lang, mapping)
         self.segments[25].zip_and_put_data(parsedcharnames.serialize())

@@ -249,7 +249,7 @@ class File:
 
         return dict(sorted(result.items()))
 
-    def put_strings(self, mapping, lang, fonts):
+    def put_strings(self, mapping, lang):
         LANGS = {"jp": 0, "en": 1, "fr": 2, "it": 3, "de": 4, "es": 5}
         lang_index = LANGS[lang]
 
@@ -270,10 +270,11 @@ class File:
                     assert mruby_opcode(symbol_instr) == OP_SETCONST
                     symbol = segment.symbols[get_bx(symbol_instr)]
 
-                    if (
-                        mapping[symbol]
-                        != segment.instructions[instr_idx - array_size + lang_index]
-                    ):
+                    prev_str_instr = segment.instructions[
+                        instr_idx - array_size + lang_index
+                    ]
+                    prev_str = segment.pool[get_bx(prev_str_instr)].value
+                    if mapping[symbol] != prev_str:
                         segment.pool.append(PoolRecord.from_string(mapping[symbol]))
                         segment.instructions[
                             instr_idx - array_size + lang_index

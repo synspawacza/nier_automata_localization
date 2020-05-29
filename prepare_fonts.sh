@@ -53,3 +53,12 @@ extract_mcd_with_cjk unpacked/ui/ui_loading.dat/messloading.mcd 05
 ./tools/unpack_font.py --char $((16#2514)) --font-id 36 unpacked/ui/ui_chapter_us.dat/messchapter.mcd fonts/01 unpacked/ui/ui_chapter_us.dtt/messchapter.wtp_000.dds
 ./tools/unpack_font.py --char $((16#251c)) --font-id 36 unpacked/ui/ui_chapter_us.dat/messchapter.mcd fonts/01 unpacked/ui/ui_chapter_us.dtt/messchapter.wtp_000.dds
 
+./tools/unpack_font.py --char $((16#300a)) --font-id 36 unpacked/ui/ui_core_us.dat/messcore.mcd fonts/01 unpacked/ui/ui_core_us.dtt/messcore.wtp_000.dds
+./tools/unpack_font.py --char $((16#300b)) --font-id 36 unpacked/ui/ui_core_us.dat/messcore.mcd fonts/01 unpacked/ui/ui_core_us.dtt/messcore.wtp_000.dds
+./tools/unpack_font.py --char $((16#300e)) --font-id 36 unpacked/ui/ui_core_us.dat/messcore.mcd fonts/01 unpacked/ui/ui_core_us.dtt/messcore.wtp_000.dds
+./tools/unpack_font.py --char $((16#300f)) --font-id 36 unpacked/ui/ui_core_us.dat/messcore.mcd fonts/01 unpacked/ui/ui_core_us.dtt/messcore.wtp_000.dds
+
+./tools/unpack_font.py --char $((16#65e5)) --font-id 1 unpacked/ui/ui_option_us.dat/messoption.mcd fonts/01 unpacked/ui/ui_option_us.dtt/messoption.wtp_000.dds
+./tools/unpack_font.py --char $((16#672c)) --font-id 1 unpacked/ui/ui_option_us.dat/messoption.mcd fonts/01 unpacked/ui/ui_option_us.dtt/messoption.wtp_000.dds
+./tools/unpack_font.py --char $((16#8a9e)) --font-id 1 unpacked/ui/ui_option_us.dat/messoption.mcd fonts/01 unpacked/ui/ui_option_us.dtt/messoption.wtp_000.dds
+

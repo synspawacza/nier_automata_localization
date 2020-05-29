@@ -45,6 +45,8 @@ def escape_nonascii(text, keep_non_ascii=False):
             result += "\\u{:04x}".format(ord(c))
         else:
             result += c
+    if result[-1] == "\\":
+        result += "<removeme>"  # Workaround for Omega-T
     return result
 
 

@@ -27,8 +27,6 @@ def insert_strings_to_file(
             parsed = smd.File.parse(in_file)
         elif file_ext == ".tmd":
             parsed = tmd.File.parse(in_file)
-        # elif file_ext == ".mcd": #TODO - implement mcd
-        #    parsed = mcd.File.parse(in_file)
         elif file_ext == ".pak":
             parsed = pak.File.parse(in_file)
         else:
@@ -40,9 +38,7 @@ def insert_strings_to_file(
     with open(properties_filename, "rb") as properties_file:
         mapping = properties.parse_properties(properties_file)
 
-    fonts = None  # TODO - read from config file for mcd
-
-    parsed.put_strings(mapping, lang, fonts)
+    parsed.put_strings(mapping, lang)
 
     with open(output_filename, "wb") as out_file:
         out_file.write(parsed.serialize())

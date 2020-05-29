@@ -1,0 +1,17 @@
+{
+    "00" : { "glyphs": "fonts/00", "kerning": null , "below" : -6.0  },
+    "02" : { "glyphs": "fonts/02", "kerning": null , "below" : -10.0 },
+    "03" : { "glyphs": "fonts/03", "kerning": null , "below" : 0.0 },
+    "08" : { "glyphs": "fonts/08", "kerning": null , "below" : 1.0   },
+    "09" : { "glyphs": "fonts/09", "kerning": null , "below" : -7.0  },
+    "10" : { "glyphs": "fonts/10", "kerning": null , "below" : -3.0  },
+    "01" : { "glyphs": "fonts/01", "kerning": "assembly/font/font_01.dat/font_01.ktb" , "below" : -5.0  },
+    "06" : { "glyphs": "fonts/01", "kerning": "assembly/font/font_01.dat/font_01.ktb" , "below" : -5.0  },
+    "36" : { "glyphs": "fonts/01", "kerning": "assembly/font/font_01.dat/font_01.ktb" , "below" : -7.0  },
+    "37" : { "glyphs": "fonts/01", "kerning": "assembly/font/font_01.dat/font_01.ktb" , "below" : -7.0  },
+    "04" : { "glyphs": "fonts/04", "kerning": "assembly/font/font_04.dat/font_04.ktb" , "below" : -5.0  },
+    "05" : { "glyphs": "fonts/05", "kerning": "assembly/font/font_05.dat/font_05.ktb" , "below" : -10.0 },
+    "07" : { "glyphs": "fonts/05", "kerning": "assembly/font/font_05.dat/font_05.ktb" , "below" : -10.0 },
+    "35" : { "glyphs": "fonts/05", "kerning": "assembly/font/font_05.dat/font_05.ktb" , "below" : -11.0 },
+    "11" : { "glyphs": "fonts/11", "kerning": "assembly/font/font_11.dat/font_11.ktb" , "below" : -7.0  }
+}

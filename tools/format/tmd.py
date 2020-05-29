@@ -50,6 +50,6 @@ class File:
             result[e.id] = e.text
         return result
 
-    def put_strings(self, mapping, lang, fonts):
+    def put_strings(self, mapping, lang):
         for e in self.entries:
             e.text = mapping[e.id]
