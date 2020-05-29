@@ -166,6 +166,10 @@ class Message:
         # using first text - other texts have the same content, but using different font
         return self.texts[0].as_string(symbols)
 
+    def put_string(self, value, symbols, fonts):
+        for text in self.texts:
+            text.put_string(value, symbols, fonts)
+
 
 class Text:
     ENTRY_SIZE = 20
@@ -200,9 +204,25 @@ class Text:
     def as_string(self, symbols):
         return "\n".join([line.as_string(symbols) for line in self.lines])
 
+    def put_string(self, value, symbols, fonts):
+        font = fonts[self.font]
+        self.lines = [
+            Line.from_string(line, font, symbols) for line in value.split("\n")
+        ]
+
 
 class Line:
     ENTRY_SIZE = 24
+
+    @staticmethod
+    def from_string(value, font, symbols):
+        result = Line()
+        result.content = []
+        result.padding = 0
+        result.below = font.line_below_value()
+        result.horiz = 0
+        result.put_string(value, symbols, font)
+        return result
 
     @staticmethod
     def parse(reader):
@@ -250,11 +270,46 @@ class Line:
             elif char_id == 0x8000:
                 # text end
                 idx += 1
+            elif char_id == 0x8020:
+                result += "<special:" + str(self.content[idx + 1]) + ">"
+                idx += 2
             else:
                 # using '<' and '>' for tagging - hopefully it doesn't break anything
-                result += "<char" + str(char_id) + ">"
+                result += "<unknown:" + str(char_id)
+                if idx + 1 < len(self.content):
+                    result += ":" + str(self.content[idx + 1])
+                result += ">"
                 idx += 2  # skip kerning
         return result
+
+    def put_string(self, value, symbols, font):
+        i = 0
+        while i < len(value):
+            if value.startswith("<special:", i):
+                i1 = value.find(":", i) + 1
+                i2 = value.find(">", i)
+                self.content.append(0x8020)
+                self.content.append(int(value[i1:i2]))
+                i = i2
+            elif value[i] == " ":
+                self.content.append(0x8001)
+                self.content.append(font.id)
+            else:
+                char_id = -1
+                for id, symbol in enumerate(symbols):
+                    if symbol.font_id == font.id and symbol.char == value[i]:
+                        char_id = id
+                if char_id < 0:
+                    raise Exception(
+                        "No glyph for '" + value[i] + "' in font " + font.id
+                    )
+                self.content.append(char_id)
+                if i > 0:
+                    self.content.append(font.get_kerning(value[i - 1], value[i]))
+                else:
+                    self.content.append(0)
+            i += 1
+        self.content.append(0x8000)
 
 
 class File:
@@ -398,6 +453,17 @@ class File:
             result[event] = msg.as_string(self.symbols)
         return result
 
+    def get_fonts_for_messages(self):
+        result = dict()
+        for msg in self.messages:
+            matching_events = list(filter(lambda e: e.id == msg.event_id, self.events))
+            assert len(matching_events) == 1
+            event = matching_events[0].name
+            result[event] = set()
+            for text in msg.texts:
+                result[event].add(text.font)
+        return result
+
     def get_glyphs(self, textures, font_id):
         result = {}
         for symbol in self.symbols:
@@ -411,3 +477,40 @@ class File:
             v2 = glyph.v2 * texture.height
             result[symbol.char] = texture.crop((u1, v1, u2, v2))
         return result
+
+    def remove_all_glyphs(self):
+        self.symbols = []
+        self.glyphs = []
+        pass
+
+    def put_glyph(
+        self, char, font_id, x, y, width, height, texture_width, texture_height
+    ):
+        glyph = Glyph()
+        glyph.texture = 0
+        glyph.u1 = x / texture_width
+        glyph.v1 = y / texture_height
+        glyph.u2 = (x + width) / texture_width
+        glyph.v2 = (y + height) / texture_height
+        glyph.width = width
+        glyph.height = height
+        glyph.above = 0
+        font = next(f for f in self.fonts if f.id == font_id)
+        glyph.below = font.below
+        glyph.horiz = font.horiz
+        self.glyphs.append(glyph)
+
+        symbol = Symbol()
+        symbol.font_id = font_id
+        symbol.char = char
+        symbol.glyph_id = len(self.glyphs) - 1
+        self.symbols.append(symbol)
+        pass
+
+    def put_strings(self, mapping, fonts):
+        for msg in self.messages:
+            matching_events = list(filter(lambda e: e.id == msg.event_id, self.events))
+            assert len(matching_events) == 1
+            event = matching_events[0].name
+            value = mapping[event]
+            msg.put_string(value, self.symbols, fonts)

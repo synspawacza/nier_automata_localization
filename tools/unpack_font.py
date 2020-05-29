@@ -40,7 +40,7 @@ if __name__ == "__main__":
         if len(args.image_files) != parsed.header.textures_count:
             raise Exception(
                 "Invalid number of image files: was {0}, expected {1}".format(
-                    len(image_files), parsed.header.textures_count
+                    len(args.image_files), parsed.header.textures_count
                 )
             )
     elif ext == ".mcd":
