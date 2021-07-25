@@ -222,7 +222,7 @@ class File:
     def get_strings(self, lang):
         result = dict()
 
-        LANGS = {"jp": 0, "en": 1, "fr": 2, "it": 3, "de": 4, "es": 5}
+        LANGS = {"jp": 0, "en": 1, "fr": 2, "it": 3, "de": 4, "es": 5, "ko": 6, "zh": 7}
         lang_index = LANGS[lang]
 
         for section in self.sections:
@@ -237,6 +237,9 @@ class File:
                         array_size = 6
                     else:
                         continue
+
+                    if lang_index >= array_size:
+                        raise Exception("Language " + lang + " is not found in file")
 
                     symbol_instr = segment.instructions[instr_idx + 1]
                     assert mruby_opcode(symbol_instr) == OP_SETCONST

@@ -14,7 +14,7 @@ import format.properties as properties
 def extract_strings_to_file(
     input_filename, output_filename, lang="en", keep_non_ascii=False
 ):
-    if lang not in {"jp", "en", "fr", "it", "de", "es"}:
+    if lang not in {"jp", "en", "fr", "it", "de", "es", "ko", "zh"}:
         raise Exception("Language " + lang + " is not supported")
 
     file_ext = os.path.splitext(input_filename)[1]
