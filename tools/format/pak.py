@@ -85,12 +85,20 @@ class File:
             result += segment.serialize()
         return result
 
+    def strings_segment_id(self):
+        for id in range(len(self.segments)):
+            if self.segments[id].entry.compressed_size == 115220:
+                return id;
+        return 25 # fallback
+
     def get_strings(self, lang):
-        return charnames.File.parse(BytesIO(self.segments[25].unzip())).get_strings(
+        id = self.strings_segment_id()
+        return charnames.File.parse(BytesIO(self.segments[id].unzip())).get_strings(
             lang
         )
 
     def put_strings(self, mapping, lang):
-        parsedcharnames = charnames.File.parse(BytesIO(self.segments[25].unzip()))
+        id = self.strings_segment_id()
+        parsedcharnames = charnames.File.parse(BytesIO(self.segments[id].unzip()))
         parsedcharnames.put_strings(lang, mapping)
-        self.segments[25].zip_and_put_data(parsedcharnames.serialize())
+        self.segments[id].zip_and_put_data(parsedcharnames.serialize())
