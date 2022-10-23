@@ -3,8 +3,8 @@
 from format.utils import *
 
 # based on:
-#   https://github.com/mrubyc/mrubyc/blob/master/doc/bytecode_format.md
-#   https://github.com/mrubyc/mrubyc/blob/master/doc/opcodes.md
+#   https://github.com/mrubyc/mrubyc/blob/release2.1/doc/bytecode_format.md
+#   https://github.com/mrubyc/mrubyc/blob/release2.1/doc/opcodes.md
 #   https://github.com/mruby/mruby/blob/master/src/load.c
 
 # based on https://github.com/mruby/mruby/blob/master/src/crc.c
@@ -31,6 +31,18 @@ def mruby_opcode(value):
 
 def get_bx(value):
     return (value >> 7) & 0xFFFF
+
+
+def get_a(value):
+    return (value >> 23) & 0x1FF
+
+
+def get_b(value):
+    return (value >> 14) & 0x1FF
+
+
+def get_c(value):
+    return (value >> 7) & 0x7F
 
 
 OP_SETCONST = 0x12
@@ -231,10 +243,12 @@ class File:
             for segment in section.segments:
                 for instr_idx, instr in enumerate(segment.instructions):
                     array_size = 0
-                    if instr == 0x804437:  # OP_ARRAY 1 1 8
-                        array_size = 8
-                    elif instr == 0x804337:  # OP_ARRAY 1 1 6
-                        array_size = 6
+                    if (
+                        mruby_opcode(instr) == OP_ARRAY
+                        and get_a(instr) == 1
+                        and get_b(instr) == 1
+                    ):
+                        array_size = get_c(instr)
                     else:
                         continue
 
@@ -262,10 +276,12 @@ class File:
             for segment in section.segments:
                 for instr_idx, instr in enumerate(segment.instructions):
                     array_size = 0
-                    if instr == 0x804437:  # OP_ARRAY 1 1 8
-                        array_size = 8
-                    elif instr == 0x804337:  # OP_ARRAY 1 1 6
-                        array_size = 6
+                    if (
+                        mruby_opcode(instr) == OP_ARRAY
+                        and get_a(instr) == 1
+                        and get_b(instr) == 1
+                    ):
+                        array_size = get_c(instr)
                     else:
                         continue
 
