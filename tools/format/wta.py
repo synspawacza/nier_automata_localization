@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from format.utils import *
+import os
 
 
 class Header:
@@ -39,6 +40,25 @@ class Entry:
         self.flags = None
         self.info = None
 
+    def is_astc(self):
+        if not self.info:
+            return False
+        return self.info[4] in {0x79, 0x7D, 0x8B}
+
+    def tex_width(self):
+        return int.from_bytes(self.info[12:15], "little", signed=False)
+
+    def tex_height(self):
+        return int.from_bytes(self.info[16:19], "little", signed=False)
+
+    def astc_header(self):
+        return (
+            b"\x13\xAB\xA1\x5C\x06\x06\0"
+            + self.info[12:15]
+            + self.info[16:19]
+            + b"\1\0\0"
+        )
+
 
 class File:
     @staticmethod
@@ -67,9 +87,16 @@ class File:
 
         result.has_info_table = result.header.info_offset > 0
         if result.has_info_table:
+            reader.seek(0, os.SEEK_END)
+            end_pos = reader.tell()
+            info_record_size = int(
+                (end_pos - result.header.info_offset) / result.header.textures_count
+            )
+            if info_record_size < 256 and info_record_size > 0:
+                info_record_size = 20
             reader.seek(result.header.info_offset)
             for i in range(result.header.textures_count):
-                result.textures[i].info = read_bytes(reader, 20)
+                result.textures[i].info = read_bytes(reader, info_record_size)
 
         return result
 

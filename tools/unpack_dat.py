@@ -40,7 +40,11 @@ def unpack_dir(input_dir, output_dir, depth):
     for entry in os.scandir(input_dir):
         if entry.is_dir():
             unpack_dir(entry.path, os.path.join(output_dir, entry.name), depth - 1)
-        else:
+        elif os.path.splitext(entry.path)[1] != ".dtt":
+            unpack_file(entry.path, output_dir)
+    # to ensure textures are unpacked in preoper order (dat first, dtt second)
+    for entry in os.scandir(input_dir):
+        if entry.is_file() and os.path.splitext(entry.path)[1] == ".dtt":
             unpack_file(entry.path, output_dir)
 
 

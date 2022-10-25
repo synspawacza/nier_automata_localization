@@ -5,7 +5,7 @@ echo "Extracting fonts from ftb files"
 for font in 00 01 04 05 11
 do
     ftb=unpacked/font/font_${font}.dat/font_${font}.ftb
-    textures=unpacked/font/font_${font}.dtt/font_${font}.wtp_*
+    textures=unpacked/font/font_${font}.dtt/font_${font}.wtp_*.dds
     out_dir=fonts/${font}
     ./tools/unpack_font.py --skip-cjk ${ftb} ${out_dir} ${textures}
 done
