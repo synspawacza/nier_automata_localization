@@ -51,6 +51,13 @@ class Entry:
     def tex_height(self):
         return int.from_bytes(self.info[16:19], "little", signed=False)
 
+    def update_astc_info(self):
+        if not self.is_astc():
+            return
+        self.info = bytearray(self.info)
+        self.info[4] = 0x79  # ASTC_4x4_UNORM
+        self.info[32:36] = self.size.to_bytes(4, "little")
+
     def astc_header(self):
         return (
             b"\x13\xAB\xA1\x5C\x06\x06\0"

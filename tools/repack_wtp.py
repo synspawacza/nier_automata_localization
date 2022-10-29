@@ -3,6 +3,7 @@
 import argparse
 import format.wta as wta
 from format.utils import *
+import swizzle
 
 
 def repack_wtp(parsed_wta, in_wtp, out_wtp, textures):
@@ -11,8 +12,15 @@ def repack_wtp(parsed_wta, in_wtp, out_wtp, textures):
             texture = None
             with open(textures[id], "rb") as texture_file:
                 texture = texture_file.read()
+            if f.is_astc():
+                size_range = 4 if f.tex_height() >= 512 else 3
+                texture = swizzle.swizzle(
+                    f.tex_width(), f.tex_height(), 4, 4, 16, 0, size_range, texture[16:]
+                )
             f.offset = out_wtp.tell()
             f.size = len(texture)
+            if f.is_astc():
+                f.update_astc_info()
             out_wtp.write(texture)
             out_wtp.write(write_padding(out_wtp.tell(), 0x1000))
         else:

@@ -19,8 +19,16 @@ function put_strings() {
         mkdir -p assembly/${DAT_FILE}/
         mkdir -p assembly/${DTT_FILE}/
         ./tools/put_strings_mcd.py unpacked/${DAT_FILE}/${NAME}.mcd target/${NAME}${TLANG}.properties fonts/fonts.json assembly/${DAT_FILE}/${NAME}.mcd assembly/${DTT_FILE}/${NAME}.wtp_000.png
-        convert -define dds:mipmaps=0 assembly/${DTT_FILE}/${NAME}.wtp_000.png assembly/${DTT_FILE}/${NAME}.wtp_000.dds
-        ./tools/repack_wtp.py unpacked/${DAT_FILE}/${NAME}.wta unpacked/${DTT_FILE}/${NAME}.wtp assembly/${DAT_FILE}/${NAME}.wta assembly/${DTT_FILE}/${NAME}.wtp --texture 0 assembly/${DTT_FILE}/${NAME}.wtp_000.dds
+
+        if stat unpacked/${DTT_FILE}/*.astc >/dev/null 2>&1; then
+            TGT_TEX_EXT=astc
+        else
+            TGT_TEX_EXT=dds
+        fi
+
+        ./tools/convert_texture.sh assembly/${DTT_FILE}/${NAME}.wtp_000.png assembly/${DTT_FILE}/${NAME}.wtp_000.${TGT_TEX_EXT}
+        ./tools/repack_wtp.py unpacked/${DAT_FILE}/${NAME}.wta unpacked/${DTT_FILE}/${NAME}.wtp assembly/${DAT_FILE}/${NAME}.wta assembly/${DTT_FILE}/${NAME}.wtp --texture 0 assembly/${DTT_FILE}/${NAME}.wtp_000.${TGT_TEX_EXT}
+
         mkdir -p `dirname output/${DAT_FILE}`
         mkdir -p `dirname output/${DTT_FILE}`
         ./tools/repack_dat.py data/${DAT_FILE} output/${DAT_FILE} assembly/${DAT_FILE}/*

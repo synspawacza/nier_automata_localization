@@ -8,9 +8,17 @@ function build_font() {
     mkdir -p output/font/
     mkdir -p output/font/
 
+    if stat unpacked/font/font_${1}.dtt/*.astc >/dev/null 2>&1; then
+        TGT_TEX_EXT=astc
+    else
+        TGT_TEX_EXT=dds
+    fi
+
+    N=$((`ls unpacked/font/font_${1}.dtt/*.dds | wc -l` - 1))
+
     # add ĄąĆćĘęŁłŃńŚśŹźŻż
-    ./tools/put_glyphs.py unpacked/font/font_${1}.dat/font_${1}.ftb unpacked/font/font_${1}.dtt/font_${1}.wtp_00${2}.dds \
-        assembly/font/font_${1}.dat/font_${1}.ftb assembly/font/font_${1}.dtt/font_${1}.wtp_00${2}.png --page ${2} \
+    ./tools/put_glyphs.py unpacked/font/font_${1}.dat/font_${1}.ftb unpacked/font/font_${1}.dtt/font_${1}.wtp_00${N}.dds \
+        assembly/font/font_${1}.dat/font_${1}.ftb assembly/font/font_${1}.dtt/font_${1}.wtp_00${N}.png --page ${N} \
         --char $((16#0104)) fonts/${1}/0104.png \
         --char $((16#0105)) fonts/${1}/0105.png \
         --char $((16#0106)) fonts/${1}/0106.png \
@@ -28,7 +36,7 @@ function build_font() {
         --char $((16#017b)) fonts/${1}/017b.png \
         --char $((16#017c)) fonts/${1}/017c.png
 
-    convert -define dds:mipmaps=0 assembly/font/font_${1}.dtt/font_${1}.wtp_00${2}.png assembly/font/font_${1}.dtt/font_${1}.wtp_00${2}.dds
+    ./tools/convert_texture.sh assembly/font/font_${1}.dtt/font_${1}.wtp_00${N}.png assembly/font/font_${1}.dtt/font_${1}.wtp_00${N}.${TGT_TEX_EXT}
     
     # add ĄąĆćĘęŃńŚśŹźŻż (skip Ł and ł)
     if [ -e unpacked/font/font_${1}.dat/font_${1}.ktb ]
@@ -51,15 +59,15 @@ function build_font() {
     fi
 
     ./tools/repack_wtp.py unpacked/font/font_${1}.dat/font_${1}.wta unpacked/font/font_${1}.dtt/font_${1}.wtp \
-        --texture ${2} assembly/font/font_${1}.dtt/font_${1}.wtp_00${2}.dds \
+        --texture ${N} assembly/font/font_${1}.dtt/font_${1}.wtp_00${N}.${TGT_TEX_EXT} \
         assembly/font/font_${1}.dat/font_${1}.wta assembly/font/font_${1}.dtt/font_${1}.wtp
 
     ./tools/repack_dat.py data/font/font_${1}.dat output/font/font_${1}.dat assembly/font/font_${1}.dat/*
     ./tools/repack_dat.py data/font/font_${1}.dtt output/font/font_${1}.dtt assembly/font/font_${1}.dtt/*.wtp
 }
 
-build_font 00 0
-build_font 01 2
-build_font 04 2
-build_font 05 2
-build_font 11 2
+build_font 00
+build_font 01
+build_font 04
+build_font 05
+build_font 11

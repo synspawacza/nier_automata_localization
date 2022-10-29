@@ -63,7 +63,10 @@ if __name__ == "__main__":
     for char, glyph in parsed.get_glyphs(textures, args.font_id).items():
         if args.char and args.char != ord(char):
             continue
-        if args.skip_cjk and ord(char) >= 0x2E80 and ord(char) <= 0x9FFF:
+        if args.skip_cjk and (
+            (ord(char) >= 0x2E80 and ord(char) <= 0x9FFF)
+            or (ord(char) >= 0xAC00 and ord(char) <= 0xD7FF)
+        ):
             continue
         outfile = os.path.join(args.directory, "{0:04x}.png".format(ord(char)))
         glyph.save(outfile)
